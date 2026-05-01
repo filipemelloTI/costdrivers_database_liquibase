@@ -1,25 +1,25 @@
-name: Rollback Banco de Dados
+name: Rollback por Tag
 
 on:
   workflow_dispatch:
     inputs:
-      passos:
-        description: 'Quantos changesets deseja desfazer?'
+      tag:
+        description: 'Tag para a qual deseja voltar (ex.: v20260501_1)'
         required: true
-        default: '1'
 
 jobs:
-  rollback:
+  rollback-to-tag:
     runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v4
-      - name: Executar Rollback
+
+      - name: Executar Rollback para Tag
         shell: powershell
         run: |
           & "C:\Liquibase\liquibase.bat" `
           --search-path="." `
-          rollbackCount ${{ github.event.inputs.passos }} --changelog-file="db-master.xml" `
+          rollbackToTag ${{ github.event.inputs.tag }} --changelog-file="db-master.xml" `
           --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
           --username="${{ secrets.DB_USER }}" `
           --password="${{ secrets.DB_PASSWORD }}"

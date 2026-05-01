@@ -7,6 +7,6 @@ BEGIN
     (
         ID   INT NOT NULL PRIMARY KEY,
         Nome VARCHAR(100) NOT NULL
-    );
+    )
 END
 -- rollback DROP TABLE dbo.MinhaTabela;

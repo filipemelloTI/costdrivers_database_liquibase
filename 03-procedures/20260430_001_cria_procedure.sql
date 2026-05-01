@@ -6,6 +6,6 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT 1 AS Exemplo;
+    SELECT 1 AS Exemplo
 END;
 -- rollback DROP PROCEDURE dbo.usp_MinhaProc;

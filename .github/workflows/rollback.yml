@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag para a qual deseja voltar (ex.: v20260501_1)'
+        description: 'Tag para a qual deseja voltar (ex.: deploy_costdrivers_20260501_121355)'
         required: true
 
 jobs:
@@ -18,8 +18,9 @@ jobs:
         shell: powershell
         run: |
           & "C:\Liquibase\liquibase.bat" `
-          --search-path="." `
-          rollbackToTag ${{ github.event.inputs.tag }} --changelog-file="db-master.xml" `
-          --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
-          --username="${{ secrets.DB_USER }}" `
-          --password="${{ secrets.DB_PASSWORD }}"
+            --search-path="." `
+            --changelog-file="db-master.xml" `
+            --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
+            --username="${{ secrets.DB_USER }}" `
+            --password="${{ secrets.DB_PASSWORD }}" `
+            rollback --tag=${{ github.event.inputs.tag }}

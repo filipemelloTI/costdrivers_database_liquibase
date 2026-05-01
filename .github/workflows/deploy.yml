@@ -11,6 +11,12 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
+      - name: Diagnóstico de rede até o SQL
+        shell: powershell
+        run: |
+          Write-Host "Testando conexão TCP até o SQL..."
+          Test-NetConnection localhost -Port 1433 | Format-List *
+
       - name: Executar Liquibase
         shell: powershell
         run: |

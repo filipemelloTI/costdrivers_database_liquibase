@@ -1,0 +1,25 @@
+name: Rollback Banco de Dados
+
+on:
+  workflow_dispatch:
+    inputs:
+      passos:
+        description: 'Quantos changesets deseja desfazer?'
+        required: true
+        default: '1'
+
+jobs:
+  rollback:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Executar Rollback
+        shell: powershell
+        run: |
+          & "C:\Liquibase\liquibase.bat" `
+          --search-path="." `
+          rollbackCount ${{ github.event.inputs.passos }} --changelog-file="db-master.xml" `
+          --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
+          --username="${{ secrets.DB_USER }}" `
+          --password="${{ secrets.DB_PASSWORD }}"

@@ -1,0 +1,22 @@
+name: Deploy Liquibase (Manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-banco:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Executar Liquibase
+        shell: powershell
+        run: |
+          & "C:\Liquibase\liquibase.bat" `
+          --search-path="." `
+          update --changelog-file="db-master.xml" `
+          --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
+          --username="${{ secrets.DB_USER }}" `
+          --password="${{ secrets.DB_PASSWORD }}"

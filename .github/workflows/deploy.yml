@@ -23,3 +23,17 @@ jobs:
             --username="${{ secrets.DB_USER }}" `
             --password="${{ secrets.DB_PASSWORD }}" `
             update
+
+      - name: Marcar tag pós-deploy
+        shell: powershell
+        run: |
+          $tag = "deploy_costdrivers_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+          Write-Host "Marcando tag $tag"
+          & "C:\Liquibase\liquibase.bat" `
+            --search-path="." `
+            --changelog-file="db-master.xml" `
+            --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
+            --username="${{ secrets.DB_USER }}" `
+            --password="${{ secrets.DB_PASSWORD }}" `
+            tag $tag
+            

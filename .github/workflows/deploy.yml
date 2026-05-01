@@ -26,3 +26,15 @@ jobs:
           --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
           --username="${{ secrets.DB_USER }}" `
           --password="${{ secrets.DB_PASSWORD }}"
+
+      - name: Marcar tag pós-deploy
+        shell: powershell
+        run: |
+          $tag = "deploy_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+          Write-Host "Marcando tag $tag"
+          & "C:\Liquibase\liquibase.bat" `
+          --search-path="." `
+          tag $tag --changelog-file="db-master.xml" `
+          --url="jdbc:sqlserver://${{ secrets.DB_HOST }};databaseName=${{ secrets.DB_NAME }};trustServerCertificate=true" `
+          --username="${{ secrets.DB_USER }}" `
+          --password="${{ secrets.DB_PASSWORD }}" 
